@@ -20,6 +20,11 @@ export default function LeftNav() {
   return (
     <nav>
       <Item to="/" label="Home" />
+      <Item to="/explore" label="Explore" />
+      <Item to="/notifications" label="Notifications" />
+      <Item to="/messages" label="Messages" />
+      <Item to="/bookmarks" label="Bookmarks" />
+      <Item to="/search" label="Search" />
       <Item to="/profile/me" label="Profile" />
     </nav>
   );
