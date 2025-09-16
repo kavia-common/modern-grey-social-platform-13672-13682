@@ -1,82 +1,55 @@
-# Lightweight React Template for KAVIA
+# Greyscale Twitter Replica Frontend
 
-This project provides a minimal React template with a clean, modern UI and minimal dependencies.
+A modern, purely greyscale React SPA that mirrors core Twitter-like functionality: timeline, posting, likes, comments (hook), profiles, and responsive layout. Designed without UI frameworks, only React + CSS.
 
 ## Features
-
-- **Lightweight**: No heavy UI frameworks - uses only vanilla CSS and React
-- **Modern UI**: Clean, responsive design with KAVIA brand styling
-- **Fast**: Minimal dependencies for quick loading times
-- **Simple**: Easy to understand and modify
+- Pure greyscale theme: dark modern palette with subtle elevation and borders
+- Timeline feed with composer
+- Like action and comment hook
+- Profile page with user tweets
+- Responsive layout with left navigation and right suggestions rail
+- REST API integration via env-configured base URL
+- Optional WebSocket hook for realtime updates
 
 ## Getting Started
 
-In the project directory, you can run:
+1) Install dependencies
+   npm install
 
-### `npm start`
+2) Configure environment variables
+   - Copy .env.example to .env and set:
+     REACT_APP_API_BASE_URL=http://localhost:8000
+     REACT_APP_WS_URL=ws://localhost:8000/ws   (optional)
+     REACT_APP_AUTH_TOKEN_KEY=tw_token
 
-Runs the app in development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+3) Start the app
+   npm start
 
-### `npm test`
+Open http://localhost:3000
 
-Launches the test runner in interactive watch mode.
+## API Contract (expected)
+- GET    /api/tweets?limit=&offset=           -> Array of tweets or {items: []}
+- POST   /api/tweets                          -> { id, content, author, handle, created_at, ... }
+- POST   /api/tweets/:id/like                 -> { success: true }
+- POST   /api/tweets/:id/comments             -> { id, content, ... }
+- GET    /api/users/:handle                   -> { display_name, handle, bio? }
+- GET    /api/users/:handle/tweets            -> Array of tweets or {items: []}
+- POST   /api/auth/login                      -> { token }
+- POST   /api/auth/register                   -> { token }
 
-### `npm run build`
+The UI falls back to local seed data if the backend is unavailable.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Code Map
+- src/services/api.js       REST client and token storage
+- src/services/ws.js        WebSocket helper (optional)
+- src/components/*          Layout, nav, composer, tweet card, right rail
+- src/pages/Home.js         Timeline with composer
+- src/pages/Profile.js      User profile
+- src/pages/Auth.js         Login/Register
 
-## Customization
+## Styling
+See src/App.css for the greyscale palette and component styles.
 
-### Colors
-
-The main brand colors are defined as CSS variables in `src/App.css`:
-
-```css
-:root {
-  --kavia-orange: #E87A41;
-  --kavia-dark: #1A1A1A;
-  --text-color: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.7);
-  --border-color: rgba(255, 255, 255, 0.1);
-}
-```
-
-### Components
-
-This template uses pure HTML/CSS components instead of a UI framework. You can find component styles in `src/App.css`. 
-
-Common components include:
-- Buttons (`.btn`, `.btn-large`)
-- Container (`.container`)
-- Navigation (`.navbar`)
-- Typography (`.title`, `.subtitle`, `.description`)
-
-## Learn More
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Notes
+- Public interfaces (functions intended for reuse) are labeled with PUBLIC_INTERFACE comments in the code.
+- No configuration values are hardcoded; use .env variables.
